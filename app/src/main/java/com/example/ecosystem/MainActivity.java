@@ -2,8 +2,10 @@ package com.example.ecosystem;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +15,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ListView lv_post_index;
+    private ArrayAdapter adapter;
+    private String url = "https://webserviceedgar.herokuapp.com/api_clientes?user_hash=12345&action=get";
+    public static final String ID_POST = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +42,25 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
+        lv_post_index = findViewById(R.id.lv_post_index);
+        adapter = new ArrayAdapter(this, android.R.layout.activity_list_item);
+        lv_post_index.setAdapter(adapter);
+        webServiceRest(url);
+
+        lv_post_index.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("ITEM", lv_post_index.getItemAtPosition(position).toString());
+                String datos_post[] =
+                        lv_post_index.getItemAtPosition(position).toString().split(":");
+                String id_post = datos_post[0];
+                Log.e("ID_POST", id_post);
+                Intent i = new Intent(MainActivity.this, Activity_Show_Post.class);
+                i.putExtra(ID_POST, id_post);
+                startActivity(i);
+            }});
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +79,55 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void activityInsertOnClick(View view){
+        Intent i = new Intent(MainActivity.this,Activity_Show_Post.class);
+        startActivity(i);
+    }
+
+    private void webServiceRest(String requestURL){
+        try{
+            URL url = new URL(requestURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line = "";
+            String webServiceResult="";
+            while ((line = bufferedReader.readLine()) != null){
+                webServiceResult += line;
+            }
+            bufferedReader.close();
+            parseInformation(webServiceResult);
+        }catch(Exception e){
+            Log.e("Error 100",e.getMessage());
+        }
+    }
+
+    private void parseInformation(String jsonResult){
+        JSONArray jsonArray = null;
+        String id_post;
+        String titulo;
+        String procedimiento;
+        String link_video;
+        String imagen;
+        try{
+            jsonArray = new JSONArray(jsonResult);
+        }catch (JSONException e){
+            Log.e("Error 101",e.getMessage());
+        }
+        for(int i=0;i<jsonArray.length();i++){
+            try{
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                id_post = jsonObject.getString("id_post");
+                titulo = jsonObject.getString("titulo");
+                procedimiento = jsonObject.getString("procedimiento");
+                link_video = jsonObject.getString("link_video");
+                imagen = jsonObject.getString("imagen");
+                adapter.add(titulo );
+            }catch (JSONException e){
+                Log.e("Error 102",e.getMessage());
+            }
+        }
     }
 
     @Override
