@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity
 
     private ListView lv_post_index;
     private ArrayAdapter adapter;
-    private String url = "https://webserviceedgar.herokuapp.com/api_clientes?user_hash=12345&action=get";
+    private String url = "http://webserviceedgar.herokuapp.com/api_post?user_hash=12345&action=get";
     public static final String ID_POST = "1";
 
     @Override
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
-        lv_post_index = findViewById(R.id.lv_post_index);
-        adapter = new ArrayAdapter(this, android.R.layout.activity_list_item);
+        lv_post_index = (ListView)findViewById(R.id.lv_post_index);
+        adapter = new ArrayAdapter(this, R.layout.activity__new__post);
         lv_post_index.setAdapter(adapter);
         webServiceRest(url);
 
