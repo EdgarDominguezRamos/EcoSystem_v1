@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationID" android:value="@string/facebook_app_id"/>
+
         <activity android:name=".Activity_Show_Post"></activity>
         <activity android:name=".Activity_Resultado_Busqueda" />
         <activity android:name=".Activity_Registro" />
