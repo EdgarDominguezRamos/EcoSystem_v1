@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
@@ -52,7 +53,10 @@ public class MainActivity extends AppCompatActivity
         AppEventsLogger.activateApp(this);
         //AppEventsLogger logger;
         //logger.logPurchase(BigDecimal.valueOf(4.32), Currency.getInstance("USD"));
-        
+
+        if (AccessToken.getCurrentAccessToken() == null){
+            goLoginScreeen();
+        }
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
         lv_post_index = (ListView)findViewById(R.id.lv_post_index);
@@ -90,6 +94,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void goLoginScreeen() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void activityInsertOnClick(View view){
