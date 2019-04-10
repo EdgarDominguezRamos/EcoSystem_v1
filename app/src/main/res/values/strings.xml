@@ -8,5 +8,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">1073631506157293</string> <string name="fb_login_protocol_scheme">fb1073631506157293</string>
+    <string name="cancel_login">Accion cancelada</string>
+    <string name="error_login">Error al iniciar sesión</string>
 
 </resources>

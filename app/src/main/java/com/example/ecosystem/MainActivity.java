@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+    public void logout(View view) {
+        LoginManager.getInstance().logOut();
+        goLoginScreeen();
     }
 
     public void activityInsertOnClick(View view){

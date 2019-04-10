@@ -29,7 +29,6 @@ public class Activity_Login extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email");
         // If using in a fragment
@@ -46,13 +45,13 @@ public class Activity_Login extends AppCompatActivity {
             @Override
             public void onCancel() {
                 // App code
-                Toast.makeText(getApplicationContext(), R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.cancel_login, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException exception) {
                 // App code
-                Toast.makeText(getApplicationContext(), R.string.app_name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
             }
         });
 
